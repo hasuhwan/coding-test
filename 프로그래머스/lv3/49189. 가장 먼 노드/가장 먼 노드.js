@@ -1,22 +1,33 @@
-function solution(n, edge) {
-  const countArr = new Array(n + 1).fill(0);
-  const visitedArr = new Array(n + 1).fill(false);
-  const queue = [1];
-  visitedArr[1] = true;
-  while (queue.length !== 0) {
-    const start = queue.shift();
-    edge.forEach((el) => {
-      if (el[0] === start && visitedArr[el[1]] === false) {
-        queue.push(el[1]);
-        visitedArr[el[1]] = true;
-        countArr[el[1]] = countArr[el[0]] + 1;
-      } else if (el[1] === start && visitedArr[el[0]] === false) {
-        queue.push(el[0]);
-        visitedArr[el[0]] = true;
-        countArr[el[0]] = countArr[el[1]] + 1;
-      }
-    });
-  }
-  const max = Math.max(...countArr);
-  return countArr.filter((el) => el === max).length;
+function solution(n, edges) {
+    // make adjacent list
+    const adjList = edges.reduce((G, [from, to]) => {
+        G[from] = (G[from] || []).concat(to);
+        G[to] = (G[to] || []).concat(from);
+        return G;
+    }, {});
+
+    // do BFS
+    const queue = [1];
+    const visited = {1: true};
+    const dist = {1: 0};
+    while(queue.length > 0) {
+        const node = queue.shift();
+
+        if (adjList[node]) {
+            adjList[node].forEach(n => {
+                if (!visited[n]) {
+                    queue.push(n);
+                    visited[n] = true;
+                    const d = dist[node] + 1;
+                    if (dist[n] == undefined || d < dist[n]) {
+                        dist[n] = d;
+                    }
+                }
+            });
+        }
+    }
+
+    const dists = Object.values(dist);
+    const maxDist = Math.max(...dists);
+    return dists.filter(d => d == maxDist).length;
 }
