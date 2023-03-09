@@ -1,10 +1,9 @@
-function solution(target, type) {
-  let bag = [1];
-  for (let i = 1; i <= target; i++) bag[i] = 0;
-  for (let i = 0; i < type.length; i++) {
-    for (let j = 1; j <= target; j++)
-      if (type[i] <= j)
-        bag[j] += bag[j - type[i]];
+function solution(n, money) {
+  const dp = [1, ...new Array(n).fill(0)];
+  for (let i = 0; i < money.length; i++) {
+    for (let j = money[i]; j <= n; j++) {
+      dp[j] += dp[j - money[i]];
+    }
   }
-  return bag[target];
+  return dp[n];
 }
