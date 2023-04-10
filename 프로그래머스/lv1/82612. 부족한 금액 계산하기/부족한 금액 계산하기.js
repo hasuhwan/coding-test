@@ -1,13 +1,9 @@
-  function solution(price, money, count) {
+function solution(price, money, count) {
     var answer = 0;
-    let total = 0;
-    for (let i = 1; i <= count; i++) {
-      total += price * i;
+    let sum=0;
+    for(let i=1; i<=count; i++){
+        sum+=price*i;
     }
-    answer = money - total;
-    if (money >= total) {
-      return 0;
-    } else {
-      return -answer;
-    }
-  }
+const total=money-sum;
+    return total>=0?0:-total;
+}
