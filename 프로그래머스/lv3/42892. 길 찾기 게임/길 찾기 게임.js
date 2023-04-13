@@ -1,49 +1,31 @@
-class Tree {
-  constructor(value, Xposition) {
-    this.value = value;
-    this.Xposition = Xposition;
-    this.leftChild = null;
-    this.rightChild = null;
+class Node {
+  constructor() {
+    this.value = null;
+    this.left = null;
+    this.right = null;
+    this.x = null;
   }
-  add(value, Xposition) {
-    this.Xposition > Xposition
-      ? this.left(value, Xposition)
-      : this.right(value, Xposition);
-  }
-  left(value, Xposition) {
-    this.leftChild === null
-      ? (this.leftChild = new Tree(value, Xposition))
-      : this.leftChild.add(value, Xposition);
-  }
-  right(value, Xposition) {
-    this.rightChild === null
-      ? (this.rightChild = new Tree(value, Xposition))
-      : this.rightChild.add(value, Xposition);
-  }
-}
-function preorder(search, arr) {
-  arr.push(search.value);
-  if (search.leftChild !== null) {
-    preorder(search.leftChild, arr);
-  }
-  if (search.rightChild !== null) {
-    preorder(search.rightChild, arr);
+  insert(val, x) {
+    if (this.value === null) {
+      this.value = val;
+      this.x = x;
+    } else if (this.x > x) {
+      if (this.left === null) {
+        this.left = new Node();
+      }
+      this.left.insert(val, x);
+    } else if (this.x < x) {
+      if (this.right === null) {
+        this.right = new Node();
+      }
+      this.right.insert(val, x);
+    }
   }
 }
-function postorder(search, arr) {
-  if (search.leftChild !== null) {
-    postorder(search.leftChild, arr);
-  }
-  if (search.rightChild !== null) {
-    postorder(search.rightChild, arr);
-  }
 
-  arr.push(search.value);
-}
 function solution(nodeinfo) {
-  const preorderArr = [];
-  const postorderArr = [];
-  const nodeInfo = nodeinfo
+  var answer = [[]];
+  nodeinfo = nodeinfo
     .map((el, idx) => [...el, idx + 1])
     .sort((a, b) => {
       if (b[1] === a[1]) {
@@ -51,11 +33,32 @@ function solution(nodeinfo) {
       }
       return b[1] - a[1];
     });
-  const root = new Tree(nodeInfo[0][2], nodeInfo[0][0]);
-  for (let i = 1; i < nodeInfo.length; i++) {
-    root.add(nodeInfo[i][2], nodeInfo[i][0]);
+  const node = new Node();
+  for (let i = 0; i < nodeinfo.length; i++) {
+    node.insert(nodeinfo[i][2], nodeinfo[i][0]);
   }
-  preorder(root, preorderArr);
-  postorder(root, postorderArr);
-  return [preorderArr, postorderArr];
+    function preorder(node,arr){
+        arr.push(node.value);
+        if(node.left!==null){
+            preorder(node.left,arr);
+        }
+        if(node.right!==null){
+            preorder(node.right,arr);
+        }
+    }
+    function postorder(node,arr){
+        if(node.left!==null){
+            postorder(node.left,arr);
+        }
+        if(node.right!==null){
+            postorder(node.right,arr);
+        }
+        arr.push(node.value);
+        
+    }
+    const preArr=[];
+    const postArr=[];
+    preorder(node,preArr);
+    postorder(node,postArr);
+  return [preArr,postArr];
 }
