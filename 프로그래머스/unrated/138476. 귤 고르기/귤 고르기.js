@@ -1,24 +1,21 @@
 function solution(k, tangerine) {
-  var answer = 0;
-  let count = 0;
-  const obj = {};
-  for (let i = 0; i < tangerine.length; i++) {
-    if (obj[tangerine[i]] === undefined) {
-      obj[tangerine[i]] = 1;
-    } else {
-      obj[tangerine[i]]++;
+    var answer = 0;
+    const map=new Map();
+    for(let i=0; i<tangerine.length; i++){
+        if(!map.has(tangerine[i])){
+            map.set(tangerine[i],1);
+        }else{
+            map.set(tangerine[i],map.get(tangerine[i])+1);
+        }
     }
-  }
-  const sorted = Object.values(obj).sort((a, b) => b - a);
-  console.log(sorted);
-  for (let i = 0; i < sorted.length; i++) {
-    answer += sorted[i];
-    count++;
-    if (answer === k) {
-      return count;
-    } else if (answer > k) {
-      return count;
+const arr=[...map];
+    arr.sort((a,b)=>b[1]-a[1]);
+    for(let i=0; i<arr.length; i++){
+        if(k<=0){
+            return answer;
+        }
+        k-=arr[i][1];
+        answer++;
     }
-  }
-  return count;
+    return answer;
 }
