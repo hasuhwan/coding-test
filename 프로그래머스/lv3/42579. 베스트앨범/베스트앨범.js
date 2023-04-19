@@ -1,31 +1,15 @@
 function solution(genres, plays) {
-  var answer = [];
-  let music = {};
-  let genresPriority = [];
-  for (let i = 0; i < genres.length; i++) {
-    if (music[genres[i]] === undefined) {
-      music[genres[i]] = [{ number: i, plays: plays[i] }];
-    } else {
-      music[genres[i]].push({ number: i, plays: plays[i] });
+    var answer = [];
+    const name={};
+    const song={};
+    for(let i=0; i<plays.length; i++){
+        name[genres[i]]=(name[genres[i]]||0)+plays[i];
+        song[genres[i]]=(song[genres[i]]||[]).concat([[plays[i],i]]);
     }
-  }
-  for (key in music) {
-    music[key] = music[key].sort((a, b) => b.plays - a.plays);
-    const total = music[key].reduce((acc, cur) => {
-      return acc + cur.plays;
-    }, 0);
-    genresPriority.push([key, total]);
-  }
-  genresPriority = genresPriority.sort((a, b) => b[1] - a[1]);
-  for (let i = 0; i < genresPriority.length; i++) {
-    if (music[genresPriority[i][0]][1]) {
-      answer.push(
-        music[genresPriority[i][0]][0].number,
-        music[genresPriority[i][0]][1].number
-      );
-    } else {
-      answer.push(music[genresPriority[i][0]][0].number);
-    }
-  }
-  return answer;
+  const order=Object.entries(name).sort((a,b)=>b[1]-a[1]);
+order.forEach(el=>{
+    const temp=song[el[0]].sort((a,b)=>b[0]-a[0]).slice(0,2).map(el=>el[1]);
+    answer=answer.concat(temp);
+})
+    return answer;
 }
