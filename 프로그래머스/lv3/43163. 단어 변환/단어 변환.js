@@ -1,30 +1,34 @@
 function solution(begin, target, words) {
-  var answer = 0;
-  const visited = [];
-  const queue = [];
-  if (!words.includes(target)) return 0;
-  queue.push([begin, answer]);
-  while (queue) {
-    let [curWord, count] = queue.shift();
-
-    if (curWord === target) {
-      return count;
+    var answer = 0;
+    if(!words.includes(target)){
+        return 0;
     }
-    words.forEach((word) => {
-      let notEqual = 0;
-      if (visited.includes(word)) {
-        return;
-      }
-      for (let i = 0; i < word.length; i++) {
-        if (word[i] !== curWord[i]) {
-          notEqual++;
+    const queue=[[begin,0]];
+    const visited=[];
+    while(queue.length!==0){
+        const [temp,count]=queue.shift();
+        if(temp===target){
+            return count;
         }
-      }
-      if (notEqual === 1) {
-        queue.push([word, ++count]);
-        visited.push(word);
-      }
-    });
-  }
-  return answer;
+        for(let i=0; i<words.length; i++){
+            let diff=0;
+            if(!visited.includes(words[i])){
+                
+                for(let j=0; j<begin.length; j++){
+                if(temp[j]!==words[i][j]){
+                    diff++;
+                    if(diff>1){
+                        break;
+                    }
+                }
+            }
+            }
+            if(diff===1){
+                queue.push([words[i],count+1]);
+                visited.push([words[i]]);
+            }
+            
+        }
+    }
+    return answer;
 }
