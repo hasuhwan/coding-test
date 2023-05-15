@@ -1,39 +1,32 @@
 function solution(n, results) {
-  var answer = 0;
-  const obj = {};
-  for (let i = 1; i <= n; i++) {
-    obj[i] = { win: [], lose: [] };
-  }
-  for (let i = 0; i < results.length; i++) {
-    const [win, lose] = results[i];
-    obj[win].win.push(lose);
-    obj[lose].lose.push(win);
-  }
-  function winFunc(tempArr, visited) {
-    for (let i = 0; i < tempArr.length; i++) {
-      if (visited[tempArr[i]] === false) {
-        visited[tempArr[i]] = true;
-        winFunc(obj[tempArr[i]].win, visited);
-      }
+    let answer = 0;
+    const graph = new Array(n+1);
+    for(let i=0; i<graph.length; i++){
+        graph[i] = new Array(n+1).fill(false);
     }
-  }
-  function loseFunc(tempArr, visited) {
-    for (let i = 0; i < tempArr.length; i++) {
-      if (visited[tempArr[i]] === false) {
-        visited[tempArr[i]] = true;
-        loseFunc(obj[tempArr[i]].lose, visited);
-      }
+    results.forEach((v)=>{
+        const [A,B] = v;
+        graph[A][B] = 1;
+        graph[B][A] = -1;
+        graph[A][A] = 0;
+        graph[B][B] = 0;
+    });
+    
+    for(let pass=0; pass<n+1; pass++){
+        for(let start=0; start<n+1; start++){
+            for(let near=0; near<n+1; near++){
+                // 이기는 경우
+                if(graph[start][pass] === 1 && graph[pass][near] === 1) graph[start][near] = 1;
+                // 지는 경우
+                if(graph[start][pass] === -1 && graph[pass][near] === -1) graph[start][near] = -1;
+            }
+        }
     }
-  }
-  for (let key in obj) {
-    const visited = new Array(n + 1).fill(false);
-    visited[0] = true;
-    visited[key] = true;
-    winFunc(obj[key].win, visited);
-    loseFunc(obj[key].lose, visited);
-    if (visited.every((el) => el === true)) {
-      answer++;
-    }
-  }
-  return answer;
+    
+    graph.forEach((line)=>{
+        if(line.filter((v)=> v === false).length === 1){
+            answer++;
+        }
+    })
+    return answer;
 }
