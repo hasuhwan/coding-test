@@ -1,15 +1,14 @@
 function solution(participant, completion) {
-    var answer = '';
     const obj={};
-    participant.forEach(el=>{
-        obj[el]=(obj[el]||0)+1;
-    })
-    completion.forEach(el=>{
-        obj[el]-=1;
-        if(obj[el]===0){
-            delete obj[el];
+    participant.forEach(str=>{
+        obj[str]=(obj[str]||0)+1;
+    });
+    completion.forEach(str=>{
+        obj[str]--;
+    });
+    for(let [key,value] of Object.entries(obj)){
+        if(value!==0){
+            return key;
         }
-    })
-
-    return Object.keys(obj)[0];
+    }
 }
