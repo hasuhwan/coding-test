@@ -1,21 +1,31 @@
 function solution(tickets) {
-    tickets.sort(); // 글자순 정렬
-    let vis=Array(tickets.length).fill(false);
     var answer = [];
-    function dfs(cur,cnt,path){
-        if(cnt===tickets.length && answer.length===0){ //정렬했으므로 처음오는 경우의 수가 답
-            answer=path;
-            return;
+    tickets=tickets.sort((a,b)=>{
+        if(a[0]===b[0]){
+            return a[1]>b[1]?1:-1;
         }
-        for(let i=0;i<tickets.length;i+=1){
-            if(vis[i])continue;
-            if(tickets[i][0]===cur){ // 출발하는 공항이 같다.
-                vis[i]=true;
-                dfs(tickets[i][1],cnt+1,[...path,tickets[i][1]]);//배열 복사해서 넣어주기
-                vis[i]=false;
-            }
+        return a[0]>b[0]?1:-1;
+    }).map((el,idx)=>[...el,idx]);
+    const visited=new Array(tickets.length).fill(false);
+    function dfs(temp,arr){
+        if(visited.every(el=>el===true)){
+            answer.push([...arr]);
+            return true;
         }
+        const allowArr=tickets.filter(([from,to,idx])=>{
+            return from===temp&&visited[idx]===false;
+        })
+        allowArr.forEach(([from,to,idx])=>{
+            arr.push(to);
+            visited[idx]=true;
+            if(dfs(to,arr)===true){
+                return true;
+            };
+            arr.pop();
+            visited[idx]=false;
+        })
     }
-    dfs("ICN",0,["ICN"])
-    return answer;
+    dfs("ICN",["ICN"]);
+    
+    return answer[0];
 }
