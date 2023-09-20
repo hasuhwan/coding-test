@@ -1,21 +1,20 @@
 function solution(n, computers) {
-  var answer = 0;
-  let visited = [];
-  const dfs = (arr) => {
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] === 1 && !visited.includes(i)) {
-        visited.push(i);
-        dfs(computers[i]);
-      }
+    var answer = 0;
+    const visited=new Array(n).fill(false);
+    function dfs(arr){
+        for(let i=0; i<arr.length; i++){
+            if(arr[i]===1&&!visited[i]){
+                visited[i]=true;
+                dfs(computers[i]);
+            }
+        }
     }
-  };
-
-  for (let i = 0; i < computers.length; i++) {
-    if (!visited.includes(i)) {
-      visited.push(i);
-      answer++;
-      dfs(computers[i]);
-    }
-  }
-  return answer;
+    computers.forEach((el,idx)=>{
+        if(!visited[idx]){
+            answer++;
+            visited[idx]=true;
+            dfs(el);
+        }
+    })
+    return answer;
 }
