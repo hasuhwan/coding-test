@@ -18,14 +18,13 @@ function solution(want, number, discount) {
                 map.set(deleteItem,number-1);
             } 
         }
-        const bool=want.every((item,idx)=>{
+        if(want.every((item,idx)=>{
             if(map.get(item)===number[idx]){
                 return true;
             }else{
                 false;
             }
-        });
-        if(bool){
+        })){
             answer++;
         }
     }
