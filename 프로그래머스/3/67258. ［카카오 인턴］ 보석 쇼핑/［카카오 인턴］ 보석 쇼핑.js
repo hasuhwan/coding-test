@@ -1,15 +1,25 @@
 function solution(gems) {
-    var answer = [1,100000];
-    const size=new Set(gems).size;
+    var answer = [1,gems.length];
+    let length=Infinity;
+    const set=new Set(gems);
     const map=new Map();
+    let start=0;
     gems.forEach((gem,idx)=>{
-        map.delete(gem);
-        map.set(gem,idx+1);
-        if(map.size===size){
-            const [min,max]=[map.values().next().value,idx+1];
-            if(answer[1]-answer[0]>max-min){
-                answer=[min,max];
-            }
+        map.set(gem,(map.get(gem)||0)+1);
+        while(map.size===set.size){
+            const del=gems[start];
+            const count=map.get(del);
+            if(count===1){
+                map.delete(del);
+                const diff=idx-start;
+                if(diff<length){
+                    length=diff;
+                    answer=[start+1,idx+1];
+                }
+            }else{
+                    map.set(del,count-1);
+                }
+            start++;
         }
     })
     return answer;
